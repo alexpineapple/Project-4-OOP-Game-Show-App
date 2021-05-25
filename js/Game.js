@@ -19,6 +19,7 @@ class Game {
     //hides the start screen overlay
     let startScreenOverlay = document.querySelector("#overlay");
     startScreenOverlay.style.display = "none"
+
     //sets the activePhrase property with the chosen phrase
     this.activePhrase = this.getRandomPhrase();
     //display phrase to the board
@@ -44,8 +45,16 @@ class Game {
         hearts += `<li class="tries"><img src="images/liveHeart.png" alt="Heart Icon" height="35" width="30"></li>`
       }
       hearts += `</ol>`
+
+      //should reset all previous heart images too
       healthBar.innerHTML = hearts;
 
+      //reset all keys to be enabled and "key" class
+      let keys = document.querySelectorAll("#qwerty .keyrow button");
+      keys.forEach((key) => {
+        key.disabled = false;
+        key.className = "key";
+      });
   }
 
   //randomly retrieves one of the phrases stored in the phrases array and returns it.
@@ -80,7 +89,7 @@ class Game {
   removeLife() {
     //increments the missed property
     this.missed++;
-    let hearts = document.getElementsByClassName("tries");
+    let hearts = document.querySelectorAll(".tries");
     //health should be depleted right to left, like video games :P
     hearts[this.totalHealth - this.missed].lastChild.src = "images/lostHeart.png";
     //game over if health has been depleted
@@ -113,6 +122,7 @@ class Game {
     }
 
     document.querySelector("#game-over-message").textContent = message;
+    document.querySelector("#phrase-was-message").textContent = `Hidden phrase: ${this.activePhrase.phrase}`
 
   }
 

@@ -23,6 +23,8 @@
        }
      }
      output += `</ul></div>`
+
+     //should override any <li> elements from the previous game
      phraseDisplay.innerHTML = output;
    }
 

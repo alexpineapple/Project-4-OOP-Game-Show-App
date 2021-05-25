@@ -15,18 +15,12 @@ startButton.addEventListener('click', (event) => {
     newGame.startGame(difficulty);
 
   }
-  //Create a new instance of the Game class
-  //let newGame = new Game([new Phrase("alex"), new Phrase("kevin"), new Phrase("astrid")]);
-
-  //start the game!
-  //newGame.startGame();
 });
 
 
 //Add click event listeners to each of the onscreen keyboard buttons
 let onscreenKeyboard = document.querySelector("#qwerty");
 onscreenKeyboard.addEventListener('click', (event) => {
-
 
   if(event.target.tagName === "BUTTON") {
     const button = event.target;
@@ -35,33 +29,44 @@ onscreenKeyboard.addEventListener('click', (event) => {
 
 });
 
+//extra credit - use the keyup event to listen to
+document.querySelector(".main-container").addEventListener('keyup', (event) => {
+  console.log("ass");
+});
+
 
 //will return a new game object
 function createNewGame() {
-  let options = [];
-  let topics = ["Star Wars", "Famous Musician", "Nintendo", "Musical Instrument"];
 
-  const randomIndex = Math.floor(Math.random() * topics.length);
-  const topic = topics[randomIndex];
+  let phrasesToGuess = [
+    {
+      topic:"Star Wars Character",
+      phrases:["Obi Wan Kenobi", "Anakin", "Han Solo", "Ahsoka Tano", "Moff Gideon", "Jabba the Hutt"]
+    },
+    {
+      topic:"Famous Musician",
+      phrases:["Elvis Presley", "Freddie Mercury", "John Lennon", "George Harrison", "Ludwig van Beethoven"]
+    },
+    {
+      topic:"Nintendo Character",
+      phrases:["Donkey Kong", "Yoshi", "Mario", "Luigi", "Samus"]
+    },
+    {
+      topic:"Programming Language",
+      phrases:["Javascript", "Assembly", "CoffeeScript", "Phython", "Visual Basic", "Brainfuck"]
+    }
+  ];
 
-  switch(topic) {
+  //obtain a random index
+  const randomIndex = Math.floor(Math.random() * phrasesToGuess.length);
 
-    case "Star Wars":
-      options = ["Obi Wan Kenobi", "Anakin", "Han Solo", "Ahsoka Tano", "Moff Gideon", "Jabba the Hutt"];
-      break;
-    case "Famous Musician":
-      options = ["Elvis Presley", "Freddie Mercury", "John Lennon", "George Harrison", "Ludwig van Beethoven"];
-      break;
-    case "Nintendo":
-      options = ["Donkey Kong", "Yoshi", "Mario", "Luigi", "Samus"];
-      break;
-    case "Musical Instrument":
-      options = ["Obi Wan Kenobi", "Anakin", "Han Solo"];
-      break;
+  //set the phrase hint (basically the topic)
+  let hint = document.querySelector("#hint");
+  hint.innerHTML = "Click me to show a hint!";
+  hint.addEventListener('click', (event) => {
+    hint.innerHTML = phrasesToGuess[randomIndex].topic;
+  });
 
-    default:
-      options = ["Alex", "Pineapple"]
-  }
-
-  return new Game(options.map(word => new Phrase(word)));
+  //create the new game object from the chosen phrases group
+  return new Game(phrasesToGuess[randomIndex].phrases.map(word => new Phrase(word)));
 }
