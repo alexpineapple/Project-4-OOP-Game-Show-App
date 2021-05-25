@@ -2,6 +2,7 @@
  * Project 4 - OOP Game App
  * app.js */
 
+//declared outside for scope purposes
 var newGame;
 
 //Add a click event listener to the "Start Game" button which creates a new Game object
@@ -10,6 +11,7 @@ startButton.addEventListener('click', (event) => {
 
   if(event.target.tagName === "BUTTON") {
     const difficulty = event.target.innerHTML;
+
     //Create a new instance of the Game class
     newGame = createNewGame();
     newGame.startGame(difficulty);
@@ -29,13 +31,38 @@ onscreenKeyboard.addEventListener('click', (event) => {
 
 });
 
-//extra credit - use the keyup event to listen to
-document.querySelector(".main-container").addEventListener('keyup', (event) => {
-  console.log("ass");
+//extra credit - use the keyup event to listen to keyboard presses
+document.addEventListener('keyup', (event) => {
+
+  //convert input to a string
+  const input = String.fromCharCode(event.which);
+
+  //proceed if overlay has been removed
+  if (document.querySelector("#overlay").style.display === "none") {
+
+    //input can only be a letter from a-z
+    if (/^[a-zA-Z]+$/.test(input)) {
+
+      //assign to the button element corresponding to the letter
+      const buttons = document.querySelectorAll("#qwerty .keyrow button");
+      buttons.forEach((button) => {
+
+        //only proceed for unpressed buttons
+        if (button.className === "key") {
+          //does button match key pressed?
+          if (button.innerHTML === input.toLowerCase()) {
+            newGame.handleInteraction(button);
+          }
+        }
+      });
+    }
+  }
 });
 
 
-//will return a new game object
+
+
+//will return a new game object and sets the hint
 function createNewGame() {
 
   let phrasesToGuess = [
@@ -49,7 +76,7 @@ function createNewGame() {
     },
     {
       topic:"Nintendo Character",
-      phrases:["Donkey Kong", "Yoshi", "Mario", "Luigi", "Samus"]
+      phrases:["Donkey Kong", "Yoshi", "Mario", "Luigi", "Samus", "Zelda"]
     },
     {
       topic:"Programming Language",

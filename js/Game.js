@@ -5,12 +5,16 @@
 class Game {
 
   constructor(phrases){
+
     //Used to track the number of missed guesses by the player
     this.missed = 0;
+
     // an array of five Phrase objects to use with the game
     this.phrases = phrases;
+
     //This is the Phrase object that’s currently in play
     this.activePhrase = null;
+
     //total number of hearts to show
     this.totalHealth = null;
   }
@@ -73,25 +77,34 @@ class Game {
     if (this.activePhrase.checkLetter(button.innerHTML)) {
       button.className = "chosen";
       //check if won
-      this.checkForWin();
+      if (this.checkForWin()) {
+        this.gameOver(true);
+      }
     } else {
       //add the "wrong" CSS class
       button.className = "wrong";
       //remove a heart
       this.removeLife();
     }
+  }
 
-
-
+  //checks to see if the player has revealed all of the letters
+  checkForWin() {
+    let hiddenLetters = document.querySelectorAll(".hide");
+    return (hiddenLetters.length === 0);
   }
 
   //this method removes a life from the scoreboard
   removeLife() {
+
     //increments the missed property
     this.missed++;
+
     let hearts = document.querySelectorAll(".tries");
+
     //health should be depleted right to left, like video games :P
     hearts[this.totalHealth - this.missed].lastChild.src = "images/lostHeart.png";
+
     //game over if health has been depleted
     if (this.totalHealth === this.missed) {
       this.gameOver(false)
@@ -99,20 +112,17 @@ class Game {
 
   }
 
-  //checks to see if the player has revealed all of the letters
-  checkForWin() {
-    let hiddenLetters = document.querySelectorAll(".hide");
-    if (hiddenLetters.length === 0) {
-      this.gameOver(true);
-    }
-  }
+
 
   //brings back overlay with win/lose message
   gameOver(hasWon) {
+
+    //bring back the overlay
     let startScreenOverlay = document.querySelector("#overlay");
     startScreenOverlay.removeAttribute("style");
 
-    let message = "";
+    //set message & class
+    let message;
     if (hasWon) {
       message = "You Win 🏆";
       startScreenOverlay.className = "win";
@@ -121,6 +131,7 @@ class Game {
       startScreenOverlay.className = "lose";
     }
 
+    //update page
     document.querySelector("#game-over-message").textContent = message;
     document.querySelector("#phrase-was-message").textContent = `Hidden phrase: ${this.activePhrase.phrase}`
 
